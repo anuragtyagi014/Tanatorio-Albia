@@ -1,6 +1,6 @@
 
 // geolocation button click event
-$(".localisationButton").click(function() {
+$(".localisationButton").click(function () {
   geolocateMe();
 });
 
@@ -8,49 +8,50 @@ $(".localisationButton").click(function() {
 const { __, _x, _n, _nx } = wp.i18n;
 let message;
 
+
 function geolocateMe() {
 
-    // disable geolocation html button
-    document.getElementsByClassName("localisationButton").disabled = true;
+  // disable geolocation html button
+  document.getElementsByClassName("localisationButton").disabled = true;
 
-    // try and find user
-    getUserLocation()
-      .then( coords=>{
-          // send request to server
-          hubSearchRedirect( coords.lat, coords.lng );
-      })
-      .catch( error=>{
+  // try and find user
+  getUserLocation()
+    .then(coords => {
+      // send request to server
+      hubSearchRedirect(coords.lat, coords.lng);
+    })
+    .catch(error => {
 
-          // display error
-          showError( error );
-      })
-      .then(()=>{ //
-        // re-enable geolocation button
-        document.getElementsByClassName("localisationButton").disabled = false;
-      });
+      // display error
+      showError(error);
+    })
+    .then(() => { //
+      // re-enable geolocation button
+      document.getElementsByClassName("localisationButton").disabled = false;
+    });
 }
 
 
-function hubSearchRedirect( lat, lng ) {
+function hubSearchRedirect(lat, lng) {
 
   // redirect to search page passing lat and lng as GET query string
   window.location = site_url + '/search?lat=' + lat + '&lng=' + lng;
 }
 
 
-function getUserLocation(){
-  return new Promise( function ( resolve, reject ) {
-    navigator.geolocation.getCurrentPosition( position=>{
+function getUserLocation() {
+  return new Promise(function (resolve, reject) {
+    navigator.geolocation.getCurrentPosition(position => {
       resolve({ lat: position.coords.latitude, lng: position.coords.longitude });
-    }, error=>{
-      reject( error );
+    }, error => {
+      reject(error);
     });
   });
 }
 
 
 function showError(error) {
-  switch(error.code) {
+  switch (error.code) {
     case error.PERMISSION_DENIED: //User denied the request for Geolocation.
 
       message = __('Error: Geolocation request denied. Please update your location settings.', 'lyra-store-locator');
